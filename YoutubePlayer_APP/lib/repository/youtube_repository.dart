@@ -7,11 +7,11 @@ class YoutubeRepository {
     final resp = await Dio().get( // 1. GET 메서드 보내기
       YOUTUBE_API_BASE_URL, // 요청을 보낼 URL
       queryParameters: { // 요청을 포함할 쿼리 변수들
-        'channelID' : CF_CHANNEL_ID,
+        'channelId' : CF_CHANNEL_ID,
         'maxResults' : 50,
         'key' : API_KEY,
         'part' : 'snippet',
-        'order' : 'data',
+        'order' : 'date',
       },
     );
 
