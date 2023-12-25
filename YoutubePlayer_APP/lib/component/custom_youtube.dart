@@ -6,19 +6,19 @@ import 'package:youtube_player_app/model/video_model.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 // 유튜브 동영상 재생기가 될 위젯 만들기
-class CustomYotubePlayer extends StatefulWidget {
+class CustomYoutubePlayer extends StatefulWidget {
   final VideoModel videoModel;
 
-  const CustomYotubePlayer({
+  const CustomYoutubePlayer({
     required this.videoModel,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<CustomYotubePlayer> createState() => _CustomYoutubePlayerState();
+  State<CustomYoutubePlayer> createState() => _CustomYoutubePlayerState();
 }
 
-class _CustomYoutubePlayerState extends State<CustomYotubePlayer> {
+class _CustomYoutubePlayerState extends State<CustomYoutubePlayer> {
  YoutubePlayerController? controller;
 
   @override
@@ -66,5 +66,4 @@ class _CustomYoutubePlayerState extends State<CustomYotubePlayer> {
     controller!.dispose(); // State 폐기 시 컨드롤러 같이 폐기
   }
 }
-
 

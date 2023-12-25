@@ -26,10 +26,24 @@ class _HomeScreenState extends State<HomeScreen> {
       body: FutureBuilder<List<VideoModel>>(
         future: YoutubeRepository.getVideos(), // 유튜브 영상 가져오기
         builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
           if (snapshot.hasError) { // 에러가 있을 경우 에러 화면에 표시하기
             return Center(
               child: Text(
                 snapshot.error.toString(),
+              ),
+            );
+          }
+
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(
+              child: Text(
+                '데이터가 없습니다.',
               ),
             );
           }
@@ -48,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // 아래로 댕겨서 스크롤 할 때 튕기는 애니메이션 추가
                 physics: BouncingScrollPhysics(),
                 children: snapshot.data!
-                    .map((e) => CustomYotubePlayer(videoModel: e))
+                    .map((e) => CustomYoutubePlayer(videoModel: e))
                     .toList(),
               ) ,
           );
