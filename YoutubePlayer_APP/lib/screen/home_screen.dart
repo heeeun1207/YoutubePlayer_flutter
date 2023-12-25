@@ -1,32 +1,59 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_app/component/custom_youtube.dart';
 import 'package:youtube_player_app/model/video_model.dart';
+import 'package:youtube_player_app/repository/youtube_repository.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key); // Added a semicolon here
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: CustomYotubePlayer(
-        videoModel: VideoModel(
-          id: '3Ck42C2ZCb8', // 임시 동영상 ID
-          title: '다트 언어 기본기 익히기'
-            // 임시 제목
+      appBar: AppBar(
+        centerTitle: true, // 제목 가운데 정렬
+        title: Text(
+          '코팩튜브',
         ),
+        backgroundColor: Colors.black,
+      ),
+      body: FutureBuilder<List<VideoModel>>(
+        future: YoutubeRepository.getVideos(), // 유튜브 영상 가져오기
+        builder: (context, snapshot) {
+          if (snapshot.hasError) { // 에러가 있을 경우 에러 화면에 표시하기
+            return Center(
+              child: Text(
+                snapshot.error.toString(),
+              ),
+            );
+          }
+
+          if (!snapshot.hasData) { // 로딩 중일 때 로딩 위젯 보여주기
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return RefreshIndicator(
+              onRefresh: () async{
+                setState(() { });
+              },
+              child: ListView( // List<VideoModel>을 CustomYoutubePlayer로 매핑,
+                // 아래로 댕겨서 스크롤 할 때 튕기는 애니메이션 추가
+                physics: BouncingScrollPhysics(),
+                children: snapshot.data!
+                    .map((e) => CustomYotubePlayer(videoModel: e))
+                    .toList(),
+              ) ,
+          );
+        },
       ),
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
